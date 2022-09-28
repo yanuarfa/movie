@@ -68,44 +68,45 @@
 // });
 
 // Fetch (Refactoring) (Async Await)
-const searchBtn = document.querySelector(".search-button");
-searchBtn.addEventListener("click", async function () {
+const searchBtn = document.querySelector(".search-button"); //State the button when user click it
+searchBtn.addEventListener("click", async function () { //When user click on the button then do this function
   try {
-    const inputKey = document.querySelector(".input-keyword");
-    const movies = await getMovies(inputKey.value);
-    updateUI(movies);
+    const inputKey = document.querySelector(".input-keyword"); //State the search input element
+    const movies = await getMovies(inputKey.value); //get the value from the search input and the use the function getMovies
+    updateUI(movies); //use the UpdateUI function
   } catch (err) {
-    alert(err);
+    alert(err); //If error catch the error and show them
   }
 });
 
-function getMovies(keyword) {
-  return fetch("http://www.omdbapi.com/?apikey=d0939e2b&s=" + keyword)
+function getMovies(keyword) { //This function get the argument from the input element
+  return fetch("http://www.omdbapi.com/?apikey=d0939e2b&s=" + keyword) //YOUR API KEY using fetch
+  //Do Promise using chaining (.)
     .then((response) => {
       if (!response.ok) {
-        throw new Error(response.statusText);
+        throw new Error(response.statusText); //If respone fail then state the error status text
       }
-      return response.json();
+      return response.json(); //if succeed return the respon in JSON
     })
     .then((response) => {
       if (response.Response === "False") {
-        throw new Error(response.Error);
+        throw new Error(response.Error); //When the api key fail or wrong do show this response error
       }
-      return response.Search;
+      return response.Search; //if succeed do the searching and show it
     });
 }
 
-function updateUI(movies) {
-  let cards = "";
-  movies.forEach((m) => (cards += showCards(m)));
-  const movieContainer = document.querySelector(".movie-container");
-  movieContainer.innerHTML = cards;
+function updateUI(movies) { //argument from the movies variable
+  let cards = ""; //state the empty cards using let
+  movies.forEach((m) => (cards += showCards(m))); //do the looping using forEach and then fill the cards variable using the showCards function
+  const movieContainer = document.querySelector(".movie-container"); //get the element movie container to get the empty container
+  movieContainer.innerHTML = cards; //after gain the container fill it with cards variable
 }
 
 // event binding
 document.addEventListener("click", async function (e) {
   // console.log(e.target);
-  if (e.target.classList.contains("modal-detail-button")) {
+  if (e.target.classList.contains("modal-detail-button")) { 
     const imdbid = e.target.dataset.imdbid;
     const movieDetail = await getMovieDetail(imdbid);
     updateUIDetail(movieDetail);
@@ -113,7 +114,7 @@ document.addEventListener("click", async function (e) {
 });
 
 function getMovieDetail(imdbid) {
-  return fetch("http://www.omdbapi.com/?apikey=d0939e2b&i=" + imdbid)
+  return fetch("http://www.omdbapi.com/?apikey=d0939e2b&i=" + imdbid) //YOUR API KEY
     .then((response) => response.json())
     .then((m) => m);
 }
